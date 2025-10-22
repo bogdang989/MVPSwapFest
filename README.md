@@ -15,3 +15,4 @@ Core part of the $MVP project is the treasury which holds Nikola Jokic moments
 ## Swapfest
 During defined periods, users can participate in swapfest contests https://mvponflow.cc/swapfest by simply sending in moments for $MVP.  
 Blockchain data is pulled near-real-time using Find Labs API, powering the live leaderboard.
+Discord bot is deployed in $MVP discord where users can type `/gift_leaderboard` to see how they rank
