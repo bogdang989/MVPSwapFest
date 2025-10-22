@@ -1,0 +1,326 @@
+/* Global Body */
+body {
+  background-color: #121826;
+  color: #E5E7EB;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100vh;
+}
+
+/* Root layout */
+#root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  width: 100%;
+}
+
+/* Navbar */
+.navbar {
+  background-color: #0E2240;
+  flex-shrink: 0;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.5);
+}
+
+.navbar-brand, .navbar-nav .nav-link {
+  color: #FDB927 !important;
+  font-weight: 600;
+}
+
+.navbar-brand {
+  font-size: 1.5rem;
+}
+
+.navbar-brand img {
+  height: 40px;
+  width: auto;
+  max-width: 100px;
+  object-fit: contain;
+  margin-right: 10px;
+  border-radius: 50%;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+  background-color: #fff;
+  padding: 2px;
+}
+
+.navbar-nav .nav-link.active {
+  border-bottom: 2px solid #FDB927;
+}
+
+.navbar-nav .nav-link:hover {
+  color: #FACC15 !important;
+}
+
+/* Fastbreak Dropdown Custom Theme */
+.navbar .fastbreak-dropdown-toggle {
+  color: #FDB927 !important;
+  font-weight: 600;
+}
+
+.navbar .fastbreak-dropdown-toggle::after {
+  border-top-color: #FDB927;
+}
+
+.navbar .fastbreak-dropdown-menu {
+  background-color: #0E2240;
+  border: none;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+}
+
+.navbar .fastbreak-dropdown-menu .dropdown-item {
+  color: #FDB927;
+  font-weight: 500;
+  background-color: transparent;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.navbar .fastbreak-dropdown-menu .dropdown-item:hover,
+.navbar .fastbreak-dropdown-menu .dropdown-item:focus {
+  background-color: #FDB927;
+  color: #0E2240;
+}
+
+/* Burger icon tweaks for dark navbar */
+.navbar-toggler {
+  border-color: #FDB927 !important;
+}
+
+.navbar-toggler-icon {
+  filter: invert(80%) sepia(100%) saturate(400%) hue-rotate(10deg);
+}
+
+/* Hero section */
+.hero {
+  background: linear-gradient(135deg, #0E2240, #418FDE);
+  color: white;
+  padding: 3rem 1rem;
+  text-align: center;
+  border-radius: 10px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+  margin-bottom: 2rem;
+}
+
+.hero h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+}
+
+.hero p {
+  font-size: 1.2rem;
+  margin-top: 1rem;
+}
+
+/* Card Styling */
+.card {
+  background-color: #1C2A3A;
+  border: 1px solid #0E2240;
+  border-radius: 10px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+  color: #E5E7EB;
+}
+
+.card-body h2,
+.card-title {
+  color: #FDB927;
+  border-bottom: 2px solid #FDB927;
+  padding-bottom: 0.5rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+/* Inner Treasury Item Cards */
+.treasury-card {
+  background-color: #1C2A3A;
+  border: 1px solid #FDB927;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+  color: #E5E7EB;
+}
+
+.treasury-card h5 {
+  color: #FDB927;
+}
+
+.treasury-card .display-6 {
+  color: #FFFFFF;
+}
+
+.treasury-card p {
+  color: #CBD5E1;
+}
+
+.treasury-card .list-group-item {
+  background-color: #1C2A3A;
+  color: #E5E7EB;
+  border-color: #273549;
+}
+
+.treasury-card .list-group-item strong {
+  color: #FDB927;
+}
+
+/* Tables */
+.table {
+  color: #E5E7EB;
+  background-color: #1C2A3A;
+}
+
+.table thead {
+  background-color: #0E2240;
+  color: #FDB927;
+}
+
+.table tbody tr {
+  background-color: #1C2A3A;
+}
+
+.table-hover tbody tr:hover {
+  background-color: #273549;
+}
+
+/* Custom Leaderboard Table Style */
+.mvp-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #1C2A3A;
+  color: #E5E7EB;
+}
+
+.mvp-table th {
+  background-color: #0E2240;
+  color: #FDB927;
+  text-align: left;
+  padding: 12px;
+  border-bottom: 2px solid #FDB927;
+}
+
+.mvp-table td {
+  padding: 12px;
+  border-bottom: 1px solid #273549;
+}
+
+.mvp-table tr:nth-child(even) {
+  background-color: #1A2535;
+}
+
+.mvp-table tr:hover {
+  background-color: #273549;
+  transition: background-color 0.2s;
+}
+
+.mvp-table thead th {
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+}
+
+/* Highlight for current user's rows in tables */
+.mvp-user-row {
+  background-color: #FDB927 !important;
+  color: #0E2240 !important;
+  font-weight: 600;
+}
+
+.mvp-user-row:hover {
+  background-color: #D89A1E !important;
+  color: #ffffff !important;
+}
+
+/* Buttons */
+.btn-primary, .btn-discord, .btn-wallet {
+  background-color: #FDB927;
+  color: #0E2240;
+  font-weight: 600;
+  border: none;
+}
+
+.btn-primary:hover, .btn-discord:hover, .btn-wallet:hover {
+  background-color: #D89A1E;
+  color: #FFFFFF;
+}
+
+.btn-outline-light {
+  border-color: #FDB927;
+  color: #FDB927;
+}
+
+.btn-outline-light:hover {
+  background-color: #FDB927;
+  color: #0E2240;
+}
+
+/* Custom Wallet Button */
+.btn-wallet {
+  padding: 0.375rem 0.75rem;
+  font-size: 0.9rem;
+  border-radius: 0.25rem;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+/* Footer */
+.footer {
+  margin-top: 4rem;
+  padding: 1rem 0;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #9CA3AF;
+  background-color: #0E2240;
+}
+
+.footer a {
+  color: #FDB927;
+  margin: 0 10px;
+  text-decoration: none;
+}
+
+.footer a:hover {
+  color: #FACC15;
+}
+
+/* Improve visibility of muted text on dark background */
+.text-muted {
+  color: #cbd5e1 !important; /* Light gray-blue instead of very dim gray */
+}
+
+.fastbreak-rules-list {
+  padding-left: 1.5rem;
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+  color: #E5E7EB;
+}
+
+.fastbreak-rules-list li {
+  margin-bottom: 0.5rem;
+  line-height: 1.5;
+}
+
+.btn-outline-light:hover {
+  background-color: #FDB927;
+  color: #0E2240;
+  border-color: #FDB927;
+}
+
+.leaderboard-link {
+  color: #4FC3F7; /* Light blue for visibility */
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.leaderboard-link:hover {
+  color: #FFFFFF; /* White on hover */
+}
+
+/* --- Fix "stuck clicked" look for Buy $MVP button --- */
+#buy-mvp,
+
+#buy-mvp:focus,
+#buy-mvp:active,
+#buy-mvp:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.navbar-nav .nav-link#buy-mvp.active {
+  border-bottom: none !important;
+}
