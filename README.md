@@ -17,3 +17,6 @@ Core part of the $MVP project is the treasury which holds Nikola Jokic moments
 - Blockchain data is pulled near-real-time using Find Labs API, powering the live leaderboard.
 - Discord bot is deployed in $MVP discord where users can type `/gift_leaderboard` to see how they rank
 - During mid October players collected 100s of points, all throughly collected using findlabs API
+- Participants won entries for rare NBA Top Shot moment raffles and a chance to pet their horse
+- Horse petting is a custom discord mini game, where users can pet their horse and win $MVP or random rewards
+- (Future) Horses will be moved from discord creatures into Flow NFTs. Users would be able to pet horse to boost their stats or get random rewards
