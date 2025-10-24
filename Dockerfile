@@ -11,4 +11,4 @@ COPY . .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Run the bot
-CMD ["python", "jokicguess.py"]
+CMD ["python", "mvponflow.py"]
