@@ -169,18 +169,30 @@ async def get_block_gifts(block_height, offset):
     }
     response = await get_with_retries(f"{BASE_URL}/blocks?height={block_height + offset + delay}", headers=headers)
     blocks = response.json()
+    
+    page = 0
+    eventsjson = list()
+    while True:
 
-    if blocks['blocks'][0]['height'] != block_height + offset + delay:
-        # print('Waiting for more blocks')
-        await asyncio.sleep(10)
-        return False
-    response = await get_with_retries(
-        f"{BASE_URL}/events?from_height={block_height}&to_height={block_height + offset}&name=A.0b2a3299cc857e29.TopShot.Deposit",
-        headers=headers
-    )
-    eventsjson = response.json()
+        if blocks['blocks'][0]['height'] != block_height + offset + delay:
+            # print('Waiting for more blocks')
+            await asyncio.sleep(10)
+            return False
+        response = await get_with_retries(
+            f"{BASE_URL}/events?from_height={block_height}&to_height={block_height + offset}&limit=100&offset={page * 100}&name=A.0b2a3299cc857e29.TopShot.Deposit",
+            headers=headers
+        )
+        #print(response.json())
+        new_events = list(response.json()['events'])
+        print(len(new_events))
+        eventsjson.extend(new_events)
+        if len(new_events) < 100:
+            break
+        page += 1
+        if page > 50:
+            break
 
-    for event in eventsjson['events']:
+    for event in eventsjson:
         if event['fields']['to'] == FLOW_ACCOUNT:
             gift_txns.append(event['transaction_hash'])
 
