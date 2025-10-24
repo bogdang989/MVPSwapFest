@@ -1,5 +1,8 @@
 # MVP SwapFest
 
+Uses mainnet contracts:
+- A.0b2a3299cc857e29.TopShot
+
 $MVP token on Flow blockchain is a utility and meme coin dedicated to multiple time NBA MVP Nikola Jokic, his TopShot moments and his horses
 
 Core part of the $MVP project is the treasury which holds Nikola Jokic moments
