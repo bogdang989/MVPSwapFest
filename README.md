@@ -5,28 +5,52 @@ Uses mainnet contracts:
 
 **Live on:** https://mvponflow.cc/swapfest
 
-# MVP token
+# 🐴 $MVP Token — Pet Jokić’s Horses
 
-$MVP token on Flow blockchain is a utility and meme coin dedicated to multiple time NBA MVP Nikola Jokic, his TopShot moments and his horses
+---
 
-Core part of the $MVP project is the treasury which holds Nikola Jokic moments, which is filled by the community in exchange for $MVP token, and is always available to get moments from, again in exchange for $MVP token.
+## 🎯 Short Summary
 
-To stimulate the community to send Jokic moments in exchange for $MVP, special events are organized, during which users are eligible to additional prizes, on top of the standard $MVP tokens for exchanging.
+**$MVP** is a community-driven Flow token that blends collectibles, gaming, and fandom.  
+Built around the legend of **Nikola Jokić**, his Top Shot moments, and his love of horses, the project rewards fans for trading, competing, and playing across the Flow ecosystem.  
 
-## What can users do with $MVP
-1. Users can send Jokic moments to the treasury to get $MVP
-1. Users can send $MVP to the treasury to get Jokic moments
-1. Users can send $MVP and a Jokic moment to get a different Jokic moment from the same tier
-1. Users can stake $MVP on increment.fi to earn passive income
-1. Users can buy/sell $MVP on both Flow Cadence or Flow EVM
-1. Users own a fraction of every moment in the treasury by holding $MVP
-1. User can participate in swap fests, where trading in moments for $MVP puts them on a leaderboard for a chance at additional prizes
+The flagship event — **Swapfest** — lets users trade Jokić Top Shot Moments, climb a real-time leaderboard, and earn prizes.
 
-## Swapfest Forte Hacks Hackathon
-- During defined periods, users can participate in swapfest contests https://mvponflow.cc/swapfest by simply sending in moments for $MVP.  
-- Blockchain data is pulled near-real-time using Find Labs API, powering the live leaderboard.
-- Discord bot is deployed in $MVP discord where users can type `/gift_leaderboard` to see how they rank
-- During mid October players collected 100s of points, all throughly collected using findlabs API
-- Participants won entries for rare NBA Top Shot moment raffles and a chance to pet their horse
-- Horse petting is a custom discord mini game, where users can pet their horse and win $MVP or random rewards
-- (Future) Horses will be moved from discord creatures into Flow NFTs. Users would be able to pet horse to boost their stats or get random rewards
+---
+
+## 💡 The Concept
+
+“**Pet Jokić’s Horses**” started as a meme-token idea.  
+The mission: **turn fandom into gameplay.**
+
+Players earn and spend **$MVP** by:
+
+- 🏇 **Trading** in and out Jokić moments and $MVP token  
+- 💰 **Staking** $MVP to earn rewards on [Increment.fi Farms](https://increment.fi/farms)  
+- 🎮 **Playing** various mini games in Discord or on the $MVP website  
+
+---
+
+## 🧩 Swapfest — The Core Contest
+
+**Swapfest** is a seasonal competition where collectors send Jokić moments to the treasury and earn points based on rarity.
+
+### 🔹 How It Works
+
+- 💸 **Send Moments:** Users “swap in” Jokić NBA Top Shot moments into the Swapfest vault.  
+- 📈 **Earn Points:** Each moment’s type, tier, and serial determine its value.  
+- 🏆 **Climb the Leaderboard:** Points update in real time using the Find Labs API, which pulls blockchain transaction data and updates player rankings live.  
+- 🎁 **Win Rewards:** Top collectors receive Flow-based prizes, rare NFTs, and $MVP bonuses.  
+
+---
+
+## 🧱 What We Built During the Hackathon
+
+During the hackathon, we:
+
+- ⚙️ **Integrated Find Labs API** for real-time point updates and instant leaderboard recalculation.  
+- 📊 **Built a live leaderboard dashboard** showing standings, stats, and prizes.  
+- 🤖 **Linked the Discord bot** with on-chain activity, so users could track swaps and rankings directly in chat.  
+
+This made **Swapfest** the first fully automated, on-chain Jokić-themed contest — merging collectibles, smart contracts, and community competition.
+
