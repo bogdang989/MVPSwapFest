@@ -5,13 +5,13 @@ Uses mainnet contracts:
 
 **Live on:** https://mvponflow.cc/swapfest
 
+# MVP token
+
 $MVP token on Flow blockchain is a utility and meme coin dedicated to multiple time NBA MVP Nikola Jokic, his TopShot moments and his horses
 
 Core part of the $MVP project is the treasury which holds Nikola Jokic moments, which is filled by the community in exchange for $MVP token, and is always available to get moments from, again in exchange for $MVP token.
 
 To stimulate the community to send Jokic moments in exchange for $MVP, special events are organized, during which users are eligible to additional prizes, on top of the standard $MVP tokens for exchanging.
-
-# MVP token
 
 ## What can users do with $MVP
 1. Users can send Jokic moments to the treasuty to get $MVP
