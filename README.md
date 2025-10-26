@@ -14,7 +14,7 @@ Core part of the $MVP project is the treasury which holds Nikola Jokic moments, 
 To stimulate the community to send Jokic moments in exchange for $MVP, special events are organized, during which users are eligible to additional prizes, on top of the standard $MVP tokens for exchanging.
 
 ## What can users do with $MVP
-1. Users can send Jokic moments to the treasuty to get $MVP
+1. Users can send Jokic moments to the treasury to get $MVP
 1. Users can send $MVP to the treasury to get Jokic moments
 1. Users can send $MVP and a Jokic moment to get a different Jokic moment from the same tier
 1. Users can stake $MVP on increment.fi to earn passive income
