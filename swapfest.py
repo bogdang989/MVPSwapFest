@@ -28,7 +28,29 @@ OFFSET = 100
 # ==============================
 # RETRYING GET REQUEST
 # ==============================
-async def get_with_retries(url, headers={}, max_retries=5, backoff_factor=1.5, **kwargs):
+async def get_with_retries(
+    url: str,
+    headers: dict = {},
+    max_retries: int = 3,
+    backoff_factor: float = 1.5,
+    **kwargs
+) -> requests.Response:
+    """
+    Perform GET request with exponential backoff retry logic.
+    
+    Args:
+        url: The URL to make the GET request to.
+        headers: Optional HTTP headers for the request.
+        max_retries: Maximum number of retry attempts.
+        backoff_factor: Multiplier for wait time between retries.
+        **kwargs: Additional arguments to pass to requests.get().
+    
+    Returns:
+        The successful response object.
+    
+    Raises:
+        Exception: If all retry attempts fail.
+    """
     attempt = 0
     wait_time = 1
 
@@ -64,6 +86,15 @@ async def get_with_retries(url, headers={}, max_retries=5, backoff_factor=1.5, *
 # TIER → POINTS
 # ==============================
 def get_points_for_tier(tier: str) -> int:
+    """
+    Map NBA Top Shot moment tier to point value.
+    
+    Args:
+        tier: The moment tier string (e.g., "MOMENT_TIER_COMMON").
+    
+    Returns:
+        Point value for the tier, or 0 if tier is not recognized.
+    """
     mapping = {
         "MOMENT_TIER_COMMON": 1,
         "MOMENT_TIER_FANDOM": 1,
@@ -79,6 +110,15 @@ def get_points_for_tier(tier: str) -> int:
 # GRAPHQL CALL
 # ==============================
 async def query_moment_metadata(moment_id: int) -> dict:
+    """
+    Query NBA Top Shot GraphQL API for moment metadata.
+    
+    Args:
+        moment_id: The unique identifier of the moment.
+    
+    Returns:
+        Dictionary containing moment data (id, tier, set, play) or None if query fails.
+    """
     url = "https://public-api.nbatopshot.com/graphql"
     query = """
     query getMintedMoment($momentId: ID!) {
@@ -121,6 +161,15 @@ async def query_moment_metadata(moment_id: int) -> dict:
 # FINAL GET MOMENT POINTS
 # ==============================
 async def get_moment_points(moment_id: int) -> int:
+    """
+    Calculate point value for a given moment based on tier and special rules.
+    
+    Args:
+        moment_id: The unique identifier of the moment.
+    
+    Returns:
+        Point value for the moment (250 for set.flowId==2, tier-based for Jokic moments, 0 otherwise).
+    """
     metadata = await query_moment_metadata(moment_id)
     if metadata is None:
         print(f"Failed to get metadata for moment {moment_id}", file=sys.stderr, flush=True)
@@ -140,11 +189,18 @@ async def get_moment_points(moment_id: int) -> int:
     # print(f"Moment ID {moment_id} is tier {tier}, awarded {points} points.")
     return points
 
-def generate_jwt_token(expiry: str = "168h"):
+def generate_jwt_token(expiry: str = "168h") -> tuple[str, dict]:
     """
-    Use the auth/v1/generate endpoint with Basic Auth to get a JWT token.
-    expiry example: "10m", "2h", etc.
-    Returns the token string, or raises an exception.
+    Generate JWT token using Find.xyz API with Basic Auth.
+    
+    Args:
+        expiry: Token expiration time (e.g., "10m", "2h", "168h").
+    
+    Returns:
+        Tuple of (access_token, full_token_data).
+    
+    Raises:
+        HTTPError: If the API request fails.
     """
     url = f"https://api.find.xyz/auth/v1/generate"
     params = {"expiry": expiry}
@@ -158,7 +214,18 @@ def generate_jwt_token(expiry: str = "168h"):
 # ==============================
 # FETCH FLOW EVENTS
 # ==============================
-async def get_block_gifts(block_height, offset):
+async def get_block_gifts(block_height: int, offset: int) -> list[dict] | bool:
+    """
+    Fetch gift transactions from Flow blockchain within a block range.
+    
+    Args:
+        block_height: Starting block height to query.
+        offset: Number of blocks to query from starting height.
+    
+    Returns:
+        List of gift dictionaries containing moment_id, txn_id, timestamp, etc.
+        Returns False if blocks are not yet available.
+    """
     gifts = []
     gift_txns = []
 
@@ -225,7 +292,13 @@ async def get_block_gifts(block_height, offset):
 # ==============================
 # MAIN LOOP
 # ==============================
-async def main(offset=OFFSET):
+async def main(offset: int = OFFSET) -> None:
+    """
+    Main processing loop that monitors blockchain for gift transactions.
+    
+    Args:
+        offset: Number of blocks to process in each iteration.
+    """
     # all_gifts = []
     #reset_last_processed_block("129210000")
     block_height = get_last_processed_block() - offset
@@ -242,7 +315,6 @@ async def main(offset=OFFSET):
             if points == 0:
                 points = await get_moment_points(moment_id)
             # print(f"Transaction {gift['txn_id']} - Awarded {points} points")
-            # Here you can save to DB, file, etc.
             # all_gifts.append((gift, points))
             save_gift(
                 txn_id=gift['txn_id'],

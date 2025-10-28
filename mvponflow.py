@@ -7,15 +7,22 @@ from flask import Flask, g, jsonify
 import threading
 import swapfest
 import math
+import os
 from flask_cors import CORS
 from flask import send_from_directory
 
 
-# Run mock on port 8000 for Azure
+# Discord bot and Flask app setup
 app = Flask(__name__)
 CORS(app)
 
 def get_db():
+    """
+    Get database connection from Flask application context.
+    
+    Returns:
+        Database connection object (PostgreSQL or SQLite depending on environment).
+    """
     if 'db' not in g:
         if db_type == 'postgresql':
             g.db = psycopg2.connect(DATABASE_URL, sslmode='require')
@@ -25,14 +32,29 @@ def get_db():
     return g.db
 
 @app.teardown_appcontext
-def close_db(error):
+def close_db(error) -> None:
+    """
+    Close database connection when application context tears down.
+    
+    Args:
+        error: Error object if teardown is due to an exception, None otherwise.
+    """
     db = g.pop('db', None)
     if db is not None:
         db.close()
 
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
-def serve_react(path):
+def serve_react(path: str):
+    """
+    Serve React application files with fallback to index.html for client-side routing.
+    
+    Args:
+        path: Requested file path within the React build directory.
+    
+    Returns:
+        File response from the react-build directory.
+    """
     if path != "" and os.path.exists(f"react-build/{path}"):
         return send_from_directory('react-build', path)
     else:
@@ -40,6 +62,12 @@ def serve_react(path):
 
 @app.route("/api/leaderboard")
 def api_leaderboard():
+    """
+    Get Swapfest leaderboard with points, prizes, and timing multipliers.
+    
+    Returns:
+        JSON response containing prize pool and leaderboard data with entries.
+    """
     # Define event period in UTC
     start_time = '2025-09-25 21:00:00'
     end_time = '2025-10-22 00:00:00'
@@ -106,7 +134,10 @@ def api_leaderboard():
         "leaderboard": leaderboard_data
     })
 
-def run_flask():
+def run_flask() -> None:
+    """
+    Run Flask web server on all interfaces at port 8000.
+    """
     app.run(host="0.0.0.0", port=8000)
 threading.Thread(target=run_flask).start()
 
@@ -206,7 +237,13 @@ else:
     name="gift_leaderboard",
     description="Show Swapfest leaderboard by total gifted points in event period"
 )
-async def gift_leaderboard(interaction: discord.Interaction):
+async def gift_leaderboard(interaction: discord.Interaction) -> None:
+    """
+    Discord command to display Swapfest gift leaderboard with time-based multipliers.
+    
+    Args:
+        interaction: Discord interaction object for command invocation.
+    """
     # Define the event window in UTC
     start_time = '2025-09-25 21:00:00'
     end_time   = '2025-10-22 00:00:00'
@@ -259,7 +296,13 @@ async def gift_leaderboard(interaction: discord.Interaction):
 
 @bot.tree.command(name="swapfest_latest_block", description="Check the last processed blockchain block scraping swapfest gifts (Admin only)")
 @commands.has_permissions(administrator=True)
-async def latest_block(interaction: discord.Interaction):
+async def latest_block(interaction: discord.Interaction) -> None:
+    """
+    Discord command to check the last processed blockchain block (Admin only).
+    
+    Args:
+        interaction: Discord interaction object for command invocation.
+    """
     # Check if the user is an admin
     if not is_admin(interaction):
         await interaction.response.send_message(
@@ -296,7 +339,18 @@ async def add_gift(
     from_address: str,
     points: int,
     timestamp: str
-):
+) -> None:
+    """
+    Discord command to manually add a Swapfest gift to the database (Admin only).
+    
+    Args:
+        interaction: Discord interaction object for command invocation.
+        txn_id: Transaction ID from the blockchain.
+        moment_id: Unique identifier of the gifted moment.
+        from_address: Flow blockchain address of the gift sender.
+        points: Point value of the gifted moment.
+        timestamp: Timestamp of the gift transaction.
+    """
     # ✅ Check admin (if you have a custom checker)
     if not is_admin(interaction):
         await interaction.response.send_message(
@@ -331,7 +385,14 @@ async def add_gift(
 async def latest_gifts_csv(
     interaction: discord.Interaction,
     from_address: str | None = None
-):
+) -> None:
+    """
+    Discord command to list latest gifts in CSV format with optional address filter (Admin only).
+    
+    Args:
+        interaction: Discord interaction object for command invocation.
+        from_address: Optional Flow address to filter gifts by sender.
+    """
     # ✅ Check admin
     if not is_admin(interaction):
         await interaction.response.send_message(
@@ -340,7 +401,6 @@ async def latest_gifts_csv(
         )
         return
 
-    # ✅ Build query dynamically
     if from_address:
         query = prepare_query('''
             SELECT txn_id, moment_id, from_address, points, timestamp
@@ -368,7 +428,6 @@ async def latest_gifts_csv(
         )
         return
 
-    # ✅ Build CSV
     csv_lines = ["txn_id,moment_id,from_address,points,timestamp"]
 
     for txn_id, moment_id, from_address, points, timestamp in rows:
@@ -386,7 +445,13 @@ async def latest_gifts_csv(
     description="(Admin only) Re-scan gifts with 0 points and refresh their scoring"
 )
 @commands.has_permissions(administrator=True)
-async def swapfest_refresh_points(interaction: discord.Interaction):
+async def swapfest_refresh_points(interaction: discord.Interaction) -> None:
+    """
+    Discord command to re-scan and refresh point values for gifts with 0 points (Admin only).
+    
+    Args:
+        interaction: Discord interaction object for command invocation.
+    """
     # Admin check
     if not is_admin(interaction):
         await interaction.response.send_message(
@@ -449,7 +514,10 @@ async def swapfest_refresh_points(interaction: discord.Interaction):
 
 # Close the database connection when the bot stops
 @bot.event
-async def on_close():
+async def on_close() -> None:
+    """
+    Event handler to close database connection when bot stops.
+    """
     conn.close()
 
 # Read the token from secret.txt or environment variable
