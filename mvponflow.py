@@ -158,80 +158,6 @@ cursor = conn.cursor()
 db_type = 'postgresql'
 
 
-# Create gifts table
-cursor.execute(prepare_query('''
-    CREATE TABLE IF NOT EXISTS gifts (
-        id SERIAL PRIMARY KEY,
-        txn_id TEXT UNIQUE,
-        moment_id BIGINT,
-        from_address TEXT,
-        points BIGINT,
-        timestamp TEXT
-    )
-'''))
-conn.commit()
-
-# Create scraper_state table to track last processed block
-cursor.execute(prepare_query('''
-    CREATE TABLE IF NOT EXISTS scraper_state (
-        key TEXT PRIMARY KEY,
-        value TEXT
-    )
-'''))
-conn.commit()
-
-
-if db_type == "postgresql":
-    cursor.execute("DROP MATERIALIZED VIEW IF EXISTS user_rankings_summary")
-    conn.commit()
-    cursor.execute("""
-        CREATE MATERIALIZED VIEW user_rankings_summary AS
-        WITH ranked AS (
-            SELECT
-                r.username,
-                r.rank,
-                r.fastbreak_id,
-                f.game_date,
-                ROW_NUMBER() OVER (PARTITION BY r.username ORDER BY f.game_date DESC) AS rn
-            FROM fastbreak_rankings r
-            JOIN fastbreaks f ON r.fastbreak_id = f.id
-        )
-        SELECT
-            username,
-            COUNT(*) AS total_entries,
-            MIN(rank) AS best,
-            ROUND(AVG(rank)::numeric, 2) AS mean
-        FROM ranked
-        WHERE rn <= 15
-        GROUP BY username
-    """)
-    conn.commit()
-    try: # Only needed once
-        cursor.execute(prepare_query('''
-        ALTER TABLE fastbreak_rankings
-        ADD CONSTRAINT unique_fb_user UNIQUE (fastbreak_id, username);
-        '''))
-    except:
-        pass
-    conn.commit()
-else:
-    # Create view for per-user ranking summaries
-    cursor.execute(prepare_query('''
-        CREATE VIEW IF NOT EXISTS user_rankings_summary AS
-        SELECT username,
-            COUNT(*)            AS total_entries,
-            MIN(rank)           AS best,
-            ROUND(AVG(rank), 2) AS mean
-        FROM fastbreak_rankings
-        GROUP BY username
-    '''))
-
-    # Create index to speed up username filtering
-    cursor.execute(prepare_query('''
-                                 CREATE INDEX IF NOT EXISTS idx_fastbreak_rankings_username
-                                     ON fastbreak_rankings(username)
-                                 '''))
-    conn.commit()
 
 @bot.tree.command(
     name="gift_leaderboard",
@@ -248,28 +174,17 @@ async def gift_leaderboard(interaction: discord.Interaction) -> None:
     start_time = '2025-09-25 21:00:00'
     end_time   = '2025-10-22 00:00:00'
 
-    # Multiplier cutoffs (UTC)
-    boost1_cutoff = '2025-09-05 00:00:00'  # 1.4x before this
-    boost2_cutoff = '2025-09-16 00:00:00'  # 1.2x before this (and on/after Sept 4)
 
-    # Query with date-based multipliers:
-    # - < Sept 04 => 1.4x
-    # - < Sept 15 => 1.2x
-    # - otherwise 1.0x
     cursor.execute(prepare_query('''
         SELECT
             from_address,
-            SUM(points * CASE
-                WHEN timestamp < ? THEN 1.4
-                WHEN timestamp < ? THEN 1.2
-                ELSE 1.0
-            END) AS total_points
+            SUM(points) AS total_points
         FROM gifts
         WHERE timestamp BETWEEN ? AND ?
         GROUP BY from_address
         ORDER BY total_points DESC
         LIMIT 20
-    '''), (boost1_cutoff, boost2_cutoff, start_time, end_time))
+    '''), (start_time, end_time))
     rows = cursor.fetchall()
 
     if not rows:
@@ -281,10 +196,6 @@ async def gift_leaderboard(interaction: discord.Interaction) -> None:
 
     # Format leaderboard with wallet-to-username mapping
     leaderboard_lines = ["🎁 **Swapfest Gift Leaderboard** 🎁"]
-    leaderboard_lines.append(
-        f"_Between {start_time} UTC and {end_time} UTC_"
-        f"\n_1.4× before {boost1_cutoff} • 1.2× before {boost2_cutoff}_\n"
-    )
     for i, (from_address, total_points) in enumerate(rows, start=1):
         username = map_wallet_to_username(from_address)
         # If you prefer whole numbers, swap to: int(round(total_points))
