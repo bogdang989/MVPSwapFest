@@ -8,6 +8,8 @@ Uses mainnet contracts:
 
 **Live on:** https://mvponflow.cc/swapfest
 
+Dune Analytics: https://dune.com/petjokicshorses/mvp-token-activity
+
 # 🐴 $MVP Token — Pet Jokić’s Horses
 
 ---
