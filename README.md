@@ -1,5 +1,8 @@
 # MVP SwapFest
 
+Mainnet $MVP contract:
+- A.6fd2465f3a22e34c.PetJokicsHorses
+
 Uses mainnet contracts:
 - A.0b2a3299cc857e29.TopShot
 
