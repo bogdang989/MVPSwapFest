@@ -72,21 +72,13 @@ def api_leaderboard():
     start_time = '2025-09-25 21:00:00'
     end_time = '2025-10-22 00:00:00'
 
-    # Multiplier cutoffs (UTC)
-    boost1_cutoff = '2025-09-05 00:00:00'  # 1.4x before this
-    boost2_cutoff = '2025-09-16 00:00:00'  # 1.2x before this (and on/after Sept 4)
-
     db = get_db()
     cursor = db.cursor()
 
     query = prepare_query('''
         SELECT
             from_address,
-            SUM(points * CASE
-                WHEN "timestamp" < ? THEN 1.4
-                WHEN "timestamp" < ? THEN 1.2
-                ELSE 1.0
-            END) AS total_points,
+            SUM(points) AS total_points,
             MAX("timestamp") AS last_scored_at
         FROM gifts
         WHERE "timestamp" BETWEEN ? AND ?
@@ -94,7 +86,7 @@ def api_leaderboard():
         ORDER BY total_points DESC, last_scored_at ASC
     ''')
 
-    cursor.execute(query, (boost1_cutoff, boost2_cutoff, start_time, end_time))
+    cursor.execute(query, (start_time, end_time))
     rows = cursor.fetchall()
 
     def _to_iso(ts):
